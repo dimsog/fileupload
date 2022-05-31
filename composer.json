@@ -17,7 +17,6 @@
   "minimum-stability": "stable",
   "require": {
     "ext-json": "*",
-    "ext-exif": "*",
     "php": ">=7.4"
   },
   "require-dev": {

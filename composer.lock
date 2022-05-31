@@ -2113,7 +2113,6 @@
     "prefer-lowest": false,
     "platform": {
         "ext-json": "*",
-        "ext-exif": "*",
         "php": ">=7.4"
     },
     "platform-dev": [],
