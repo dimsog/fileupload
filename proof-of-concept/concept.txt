@@ -6,6 +6,7 @@ $fileUpload->setMimeTypes([
     "image/png",
     "image/jpeg"
 ]);
+$fileUpload->setExtensions(["png", "jpg"]);
 
 $fileUpload->setName("new-name");
 $fileUpload->upload("upload_from_key");
