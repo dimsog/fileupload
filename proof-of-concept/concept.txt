@@ -1,0 +1,12 @@
+<?php
+
+$fileUpload = new Upload('/path/to/save');
+$fileUpload->setMaxFileSize('3M');
+$fileUpload->setMimeTypes([
+    "image/png",
+    "image/jpeg"
+]);
+
+$fileUpload->setName("new-name");
+$fileUpload->upload("upload_from_key");
+$fileUpload->multipleUpload("upload_from_key");
