@@ -1,0 +1,31 @@
+{
+  "name": "dimsog/fileupload",
+  "description": "A simple file uploader",
+  "keywords": ["upload", "file"],
+  "type": "library",
+  "license": "MIT",
+  "support": {
+    "issues": "https://github.com/dimsog/fileupload/issues",
+    "source": "https://github.com/dimsog/fileupload"
+  },
+  "authors": [
+    {
+      "name": "Dmitry R",
+      "email": "dimsog@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "ext-json": "*",
+    "ext-exif": "*",
+    "php": ">=7.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dimsog\\FileUpload\\": "src"
+    }
+  }
+}
