@@ -1,5 +1,6 @@
 {
   "name": "dimsog/fileupload",
+  "version": "0.0.1",
   "description": "A simple file uploader",
   "keywords": ["upload", "file"],
   "type": "library",
@@ -17,12 +18,13 @@
   "minimum-stability": "stable",
   "require": {
     "ext-json": "*",
+    "ext-fileinfo": "*",
     "php": ">=7.4",
-    "psr/http-message": "^1.0",
-    "symfony/validator": "^6.1"
+    "psr/http-message": "^1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.5"
+    "phpunit/phpunit": "^9.5",
+    "guzzlehttp/psr7": "2.*"
   },
   "autoload": {
     "psr-4": {
