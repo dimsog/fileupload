@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dimsog\FileUpload;
 
+use Dimsog\FileUpload\Exceptions\DirectoryDoesNotExistsException;
 use Dimsog\FileUpload\Exceptions\DirectoryIsNotWritableException;
 use Dimsog\FileUpload\Exceptions\FileExistsException;
 use Dimsog\FileUpload\Exceptions\InvalidMimeTypeException;
@@ -29,6 +30,10 @@ class Upload
     private bool $generateUniqueName = false;
 
     private bool $overwrite = false;
+
+    private bool $createDirectory = false;
+
+    private int $createDirectoryPermissions = 0777;
 
 
     public function __construct(string $pathToUpload)
@@ -66,23 +71,31 @@ class Upload
         return $this;
     }
 
+    public function autoCreateDirectory(int $permissions = 0777): self
+    {
+        $this->createDirectory = true;
+        $this->createDirectoryPermissions = $permissions;
+        return $this;
+    }
+
     public function upload(UploadedFileInterface $file): FileInfo
     {
         $fileInfo = new FileInfo($file->getStream()->getMetadata('uri'));
+
         $this->validateOrFail($fileInfo);
+        $this->checkTargetDirectoryPathBeforeUpload();
+
         $targetPath = $this->generateFullTargetPath($file->getClientFilename());
         if ($this->overwrite === false && file_exists($targetPath)) {
             throw new FileExistsException('File already exists');
         }
+
         $file->moveTo($targetPath);
         return new FileInfo($targetPath);
     }
 
     private function validateOrFail(FileInfo $fileInfo): void
     {
-        if (!is_writable($this->targetPath)) {
-            throw new DirectoryIsNotWritableException($this->errorDirectoryIsNotWritable);
-        }
         if (!empty($this->mimeTypes) && !in_array($fileInfo->getMimeType(), $this->mimeTypes)) {
             throw new InvalidMimeTypeException($this->buildErrorString($this->errorMimeTypes));
         }
@@ -118,6 +131,22 @@ class Upload
             $bytes = $bytes * $units[$unit];
         }
         return $bytes;
+    }
+
+    private function checkTargetDirectoryPathBeforeUpload(): void
+    {
+        $targetPath = $this->targetPath;
+        if (!file_exists($targetPath)) {
+            if (!$this->createDirectory) {
+                throw new DirectoryDoesNotExistsException();
+            }
+            if (!@mkdir($targetPath, $this->createDirectoryPermissions, true)) {
+                throw new DirectoryIsNotWritableException($this->errorDirectoryIsNotWritable);
+            }
+        }
+        if (!is_writable($targetPath)) {
+            throw new DirectoryIsNotWritableException();
+        }
     }
 
     private function generateFullTargetPath(string $clientFileName): string

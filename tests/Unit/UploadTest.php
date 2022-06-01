@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use Dimsog\FileUpload\Upload;
 use GuzzleHttp\Psr7\UploadedFile;
+use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
 
 class UploadTest extends TestCase
@@ -25,5 +26,25 @@ class UploadTest extends TestCase
         $this->assertFileExists(__DIR__ . '/test-new.txt');
         rename(__DIR__ .'/test-new.txt', __DIR__ . '/test.txt');
         $this->assertFileExists(__DIR__ . '/test.txt');
+    }
+
+    public function testAutoCreateDirectory()
+    {
+        $stream = Utils::streamFor('123');
+        $file = new UploadedFile(
+            $stream,
+            $stream->getSize(),
+            UPLOAD_ERR_OK,
+            $clientFileName = 'test-auto-create-directory.txt'
+        );
+        $uploadDirectory = __DIR__ . '/new-directory';
+        $fileUpload = new Upload($uploadDirectory);
+        $fileUpload->autoCreateDirectory();
+        $fileUpload->upload($file);
+        $this->assertDirectoryExists($uploadDirectory);
+        $this->assertFileExists($uploadDirectory . '/' . $clientFileName);
+
+        unlink($uploadDirectory . '/' . $clientFileName);
+        rmdir($uploadDirectory);
     }
 }
