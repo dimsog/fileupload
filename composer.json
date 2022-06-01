@@ -1,6 +1,5 @@
 {
   "name": "dimsog/fileupload",
-  "version": "0.0.1",
   "description": "A simple file uploader",
   "keywords": ["upload", "file"],
   "type": "library",
