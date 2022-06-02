@@ -152,7 +152,8 @@ class Upload
     private function generateFullTargetPath(string $clientFileName): string
     {
         $targetPath = $this->targetPath;
-        $fileName = !empty($this->newFileName) ? $this->newFileName : $clientFileName;
+        $newFileName = rtrim($this->newFileName . '.' . pathinfo($clientFileName, PATHINFO_EXTENSION), '.');
+        $fileName = !empty($this->newFileName) ? $newFileName : $clientFileName;
         $fullPath = $targetPath . '/' . $fileName;
 
         if (file_exists($fullPath) && $this->generateUniqueName) {
