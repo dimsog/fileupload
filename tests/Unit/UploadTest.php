@@ -47,4 +47,21 @@ class UploadTest extends TestCase
         unlink($uploadDirectory . '/' . $clientFileName);
         rmdir($uploadDirectory);
     }
+
+    public function testSetName()
+    {
+        $stream = Utils::streamFor('123');
+        $file = new UploadedFile(
+            $stream,
+            $stream->getSize(),
+            UPLOAD_ERR_OK,
+            'test-set-name.txt'
+        );
+        $fileUpload = new Upload(__DIR__);
+        $fileUpload->setName('test-set-name-new');
+        $fileUpload->upload($file);
+        $this->assertFileExists(__DIR__ . '/test-set-name-new.txt');
+        unlink(__DIR__ . '/test-set-name-new.txt');
+    }
+
 }
